@@ -84,19 +84,29 @@
     addMessage(message, "user");
     input.value = "";
 
-    try {
-      const res = await fetch("https://script.google.com/macros/s/AKfycbypPilHWDuTnL8vNgFy3rlRAndQkOK00XCgV5hB3WxV0v3suUvMBjv2QD7ile9qMX619w/exec", {
-        method: "POST",
-        body: JSON.stringify({ message }),
-        headers: {
-          "Content-Type": "application/json"
-        }
-      });
-      const data = await res.json();
-      addMessage(data.reply, "bot");
-    } catch (err) {
-      addMessage("Something went wrong. Please try again later.", "bot");
-    }
+    async function sendMessage() {
+  const message = input.value.trim();
+  if (!message) return;
+
+  addMessage(message, "user");
+  input.value = "";
+
+  try {
+    const res = await fetch("https://script.google.com/macros/s/AKfycbypPilHWDuTnL8vNgFy3rlRAndQkOK00XCgV5hB3WxV0v3suUvMBjv2QD7ile9qMX619w/exec", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded"
+      },
+      body: `message=${encodeURIComponent(message)}`
+    });
+
+    const data = await res.json();
+    addMessage(data.reply, "bot");
+  } catch (err) {
+    addMessage("Something went wrong. Please try again later.", "bot");
+  }
+}
+
   }
 </script>
 
