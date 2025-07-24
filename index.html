@@ -87,15 +87,16 @@
     input.value = "";
 
     try {
-      // Send message via URL parameter instead of body
-      const url = `https://script.google.com/macros/s/AKfycbypPilHWDuTnL8vNgFy3rlRAndQkOK00XCgV5hB3WxV0v3suUvMBjv2QD7ile9qMX619w/exec?message=${encodeURIComponent(message)}`;
-
-      const res = await fetch(url, {
-        method: "POST"
+      const res = await fetch("https://script.google.com/macros/s/AKfycbypPilHWDuTnL8vNgFy3rlRAndQkOK00XCgV5hB3WxV0v3suUvMBjv2QD7ile9qMX619w/exec", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ message })
       });
 
       const data = await res.json();
-      addMessage(data.reply, "bot");
+      addMessage(data.reply || "No response from BORT.", "bot");
     } catch (err) {
       addMessage("Something went wrong. Please try again later.", "bot");
     }
